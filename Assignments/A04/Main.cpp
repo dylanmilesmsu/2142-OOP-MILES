@@ -44,10 +44,10 @@ using namespace std;
  */
 class CircularArrayQue {
 private:
-    int *Container; // Pointer to int container
-    int Front; // Front of the array, starts at 0 until items are removed using pop()
-    int Rear; // Rear of the array, also starts at 0 until items are added using push()
-    int QueSize; // items in the queue
+    int *Container;  // Pointer to int container
+    int Front;       // Front of the array, starts at 0 until items are removed using pop()
+    int Rear;        // Rear of the array, also starts at 0 until items are added using push()
+    int QueSize;     // items in the queue
     int CurrentSize; // current size of the queue. Cannot exceed QueSize
     /**
      * private : init

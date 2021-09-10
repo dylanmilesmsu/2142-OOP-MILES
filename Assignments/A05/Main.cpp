@@ -1,21 +1,37 @@
-/**
+/*****************************************************************************
 *                    
-*  Author:           Terry
-*  Title:            Linked List Example
-*  Course:           2143
+*  Author:           Dylan Miles
+*  Email:            dylanbmiles@gmail.com
+*  Label:            P01
+*  Title:            
+*  Course:           CMPS-2143-101
 *  Semester:         Fall 2021
 * 
 *  Description:
-*        Linked List Example 
+*        This program implements a fixed size circular array.
 * 
-*/
+*  Usage:
+*        ./main
+* 
+*  Files:            Main.cpp
+*****************************************************************************/
+
 #include <fstream>
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-// Node for our linked list
+/**
+ * struct node
+ * 
+ * Description:
+ *      Contains an integer data type, and a pointer, as this is a linked list
+ * 
+ * 
+ * Usage: 
+ * node* temp = new node(int)   
+ */
 struct node
 {
     int data; // data value (could be a lot more values)
@@ -76,7 +92,23 @@ void printArr(int *arr, int size)
     }
     cout << "\n";
 }
-
+/**
+ * class MyVector 
+ * 
+ * Description:
+ *      a variable size linked list with many overloading structures
+ *      can read from a file, array, even another MyVector
+ *      contains methods to find, push, pop values, and even supports pushing lists
+ * 
+ * 
+ * Usage: 
+ * MyVector v1;
+ * v1.pop()
+ * v1.print()
+ * v1.pushFront()
+ * v1.pushRear()
+ * v1.find()
+ */
 class MyVector
 {
 private:
@@ -115,10 +147,20 @@ public:
 
         for (int i = 0; i < size; i++)
         {
-            PushFront(A[i]);
+            pushFront(A[i]);
         }
     }
-
+    /**
+     * @brief Overloaded Constructor 
+     * 
+     * Creates a new Linked List object from 
+     * an existing MyVector
+     * 
+     * @param MyVector MyVector - existing vector
+     * 
+     * 
+     * @return void
+     */
     MyVector(const MyVector& other) {
         head = tail = NULL;
 
@@ -128,11 +170,21 @@ public:
         { // this loops until temp is NULL
             // same as `while(temp != NULL)`
 
-            PushRear(temp->data); // print data from node
+            pushRear(temp->data); // print data from node
             temp = temp->next; // move to next node
         }
     }
 
+    /**
+     * @brief Overloaded Constructor 
+     * 
+     * Creates a new Linked List object from 
+     * a filename
+     * 
+     * @param string filename, name of input file
+     * 
+     * @return void
+     */
     MyVector(string filename)
     {
         head = tail = NULL; // NULL = zeros
@@ -141,14 +193,25 @@ public:
         loadArr(filename, array, size);
          for (int i = 0; i < size; i++)
         {
-            PushFront(array[i]);
+            pushFront(array[i]);
         }
 
 
     }
 
-
-    void PushFront(int x)
+    /**
+     * public : pushFront
+     * 
+     * Description:
+     *      Push an integer to the front of the array
+     * 
+     * Params:
+     *  - int item, to be prepended to the array
+     *  
+     * Returns: 
+     *      - nothing
+     */
+    void pushFront(int x)
     {
         node *tempPtr = new node(x); // create a new node and
                                      // add data to it
@@ -168,12 +231,20 @@ public:
         }
     }
 
-    void PushFront(MyVector v2)
+    /**
+     * public : pushFront
+     * 
+     * Description:
+     *      Push an existing MyVector to the front of the array
+     * 
+     * Params:
+     *  - MuVector object, to be prepended to the array
+     *  
+     * Returns: 
+     *      - nothing
+     */
+    void pushFront(MyVector v2)
     {
-
-        //this adds in the wrong order
-        //I could make this a doubly linked list, or 
-        //I could just add the old values to the new list and return that instead.
 
         node *temp = v2.head; // temp pointer copies head
 
@@ -181,12 +252,24 @@ public:
         { // this loops until temp is NULL
             // same as `while(temp != NULL)`
 
-            PushFront(temp->data); // print data from node
+            pushFront(temp->data); // print data from node
             temp = temp->next; // move to next node
         }
     }
 
-    void PushRear(int x)
+    /**
+     * public : pushRear
+     * 
+     * Description:
+     *      Push an int to the rear of the array
+     * 
+     * Params:
+     *  - int x, to be appended to the array
+     *  
+     * Returns: 
+     *      - nothing
+     */
+    void pushRear(int x)
     {
         node *tempPtr = new node(x); // create a new node and
                                      // add data to it
@@ -207,7 +290,19 @@ public:
         }
     }
 
-    void PushRear(MyVector v2)
+    /**
+     * public : pushRear
+     * 
+     * Description:
+     *      Push an existing MyVector to the end of the array
+     * 
+     * Params:
+     *  - MuVector object, to be appended to the array
+     *  
+     * Returns: 
+     *      - nothing
+     */
+    void pushRear(MyVector v2)
     {
 
         node *temp = v2.head; // temp pointer copies head
@@ -216,12 +311,24 @@ public:
         { // this loops until temp is NULL
             // same as `while(temp != NULL)`
 
-            PushRear(temp->data); // print data from node
+            pushRear(temp->data); // print data from node
             temp = temp->next; // move to next node
         }
     }
-
-    void PushAt(int loc, int val)
+    
+    /**
+     * public : pushRear
+     * 
+     * Description:
+     *      Push an existing MyVector to the end of the array
+     * 
+     * Params:
+     *  - MuVector object, to be appended to the array
+     *  
+     * Returns: 
+     *      - nothing
+     */
+    void pushAt(int loc, int val)
     {
         if(loc < 0) {
             cout << "you're just trolling at this point.";
@@ -345,37 +452,73 @@ public:
 
 int main()
 {
-    int* ez = new int[5] {0};
-    ez[0] = 1;
-    ez[1] = 2;
-    MyVector pz(ez, 6);
-    pz.print();
-    int A[] = {1, 2, 3, 4, 5, 6}; // array initialized with 1-6
-   MyVector azz("input.dat");
-   azz.print();
+int x = 0;
 
-   MyVector copy(azz);
-   copy.print();
+MyVector v1;
+v1.pushFront(18);
+v1.pushFront(20);
+v1.pushFront(25);
+v1.pushRear(18);
+v1.pushRear(20);
+v1.pushRear(25);
+v1.print();
+// [25, 20, 18, 18, 20, 25]
 
+int A[] = {11,25,33,47,51};
+MyVector v2(A,5);
+v2.print();
+// [11, 25, 33, 47, 51]
 
-    cout << "ez" << endl;
-    copy.PushFront(pz);
-    copy.print();
-    copy.PushRear(pz);
-    copy.print();
-    copy.PushAt(3, 999);
-    copy.print();
-    int x = copy.popFront();
-    cout << endl << x << endl;
-    copy.print();
-    int r = copy.popRear();
-    cout << "THE REAR" << endl << r << endl;
-    copy.print();
-    int pa = copy.popAt(5);
-    cout << " PA " << pa << endl;
-    copy.print();
-    int index = copy.find(786);
-    cout << "INDEX: " << index << endl;
-    int foundn = copy.popAt(index);
-    cout << "FOUND VALUE: " << foundn << endl;
+v2.pushFront(9);
+//v2.inOrderPush(27);
+v2.pushRear(63);
+v2.print();
+// [9, 11, 25, 33, 47, 51, 63]
+
+v1.pushRear(v2);
+v1.print();
+// [25, 20, 18, 18, 20, 25, 9, 11, 25, 33, 47, 51, 63]
+
+x = v1.popFront();
+x = v1.popFront();
+x = v1.popFront();
+v1.print();
+// [18, 20, 25, 9, 11, 25, 27, 33, 47, 51, 63]
+cout<<x<<endl;
+// 18
+
+x = v1.popRear();
+x = v1.popRear();
+x = v1.popRear();
+v1.print();
+// [18, 20, 25, 9, 11, 25, 27, 33]
+cout<<x<<endl;
+// 47
+
+x = v2.popAt(3);
+v2.print();
+// [9, 11, 25, 33, 47, 51, 63]
+cout<<x<<endl;
+// 27
+
+x = v2.find(51);
+cout<<x<<endl;
+// 5
+
+x = v2.find(99);
+cout<<x<<endl;
+// -1
+
+MyVector v3(v1);
+v3.print();
+// [18, 20, 25, 9, 11, 25, 27, 33]
+
+v3.pushFront(v2);
+v3.print();
+//[9, 11, 25, 33, 47, 51, 63, 18, 20, 25, 9, 11, 25, 27, 33]
+
+MyVector v4("input.dat");
+v4.pushRear(v3);
+v4.print();
+
 }

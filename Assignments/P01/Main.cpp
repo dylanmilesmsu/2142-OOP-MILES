@@ -8,10 +8,15 @@
 *  Semester:         Fall 2021
 * 
 *  Description:
-*        This program implements a fixed size circular array.
+*        This program supplies and tests a robust vector that can grow, shrink
+*        add values to the front, end, or specified location from a number of inputs
+*        basically its a data type that is actually usable (as long as your program
+*        has a short life, as this does NOT clean itself up in memory. I don't think
+*        we are there in class.)
 * 
 *  Usage:
 *        ./main
+         ./input.dat
 * 
 *  Files:            Main.cpp
 *****************************************************************************/
@@ -147,7 +152,7 @@ public:
 
         for (int i = 0; i < size; i++)
         {
-            pushFront(A[i]);
+            pushRear(A[i]);
         }
     }
     /**
@@ -361,11 +366,36 @@ public:
 
     }
 
+
+    /**
+     * public : popFront
+     * 
+     * Description:
+     *      pop an int from the front of the vector
+     * 
+     * Params:
+     *  - none
+     *  
+     * Returns: 
+     *      - 1 int, from front of array
+     */
     int popFront() {
         node *temp = head;
         head = head->next;
         return temp->data;
     }
+    /**
+     * public : popFront
+     * 
+     * Description:
+     *      pop an int from the rear of the vector
+     * 
+     * Params:
+     *  - none
+     *  
+     * Returns: 
+     *      - 1 int, from rear of array
+     */
     int popRear() {
         
         node *temp = head; // temp pointer copies head
@@ -381,7 +411,18 @@ public:
         return rv->data;
 
     }
-
+    /**
+     * public : popAt
+     * 
+     * Description:
+     *      pop an int from a specified index of the array
+     * 
+     * Params:
+     *  - int location, the location of the int you want
+     *  
+     * Returns: 
+     *      - one int, from the supplied location
+     */
     int popAt(int loc) {
         if(loc < 0) {
             cout << "you're just trolling at this point.";
@@ -408,7 +449,19 @@ public:
         //required check because the condition inside the loop could pass if loc == tail
     }
 
-    //returns the index, not the value.
+    /**
+     * public : find
+     * 
+     * Description:
+     *      looks through the vector for a value matching the inputted one
+     *      returns the index of that integer, not the value
+     * 
+     * Params:
+     *  - int value, the integer you're looking for
+     *  
+     * Returns: 
+     *      - one int, the index of the value.
+     */
     int find(int val) {
         node *temp = head; // temp pointer copies head
         int i = 0;
@@ -426,11 +479,52 @@ public:
         return -1;
     }
 
+    /**
+     * public : print
+     * 
+     * Description:
+     *      Writes output of vector to a supplied file.
+     * 
+     * Params:
+     *  - ofstream file, a file to write to.
+     *  
+     * Returns: 
+     *      - nothing
+     */
+    void print(ofstream& file)
+    {
+        node *temp = head; // temp pointer copies head
+        file << "[";
+        while (temp)
+        { // this loops until temp is NULL
+            // same as `while(temp != NULL)`
+            file << temp->data; // print data from node
+            if (temp->next)
+            {
+                file << ", ";
+            }
+            temp = temp->next; // move to next node
+        }
+        file << "]" << endl;
+    }
 
+
+    /**
+     * public : print
+     * 
+     * Description:
+     *      prints the contents of the vector to console
+     * 
+     * Params:
+     *  - nothing
+     *  
+     * Returns: 
+     *      - nothing
+     */
     void print()
     {
         node *temp = head; // temp pointer copies head
-
+        cout << "[";
         while (temp)
         { // this loops until temp is NULL
             // same as `while(temp != NULL)`
@@ -438,11 +532,11 @@ public:
             cout << temp->data; // print data from node
             if (temp->next)
             {
-                cout << "->";
+                cout << ", ";
             }
             temp = temp->next; // move to next node
         }
-        cout << endl;
+        cout << "]" << endl;
     }
 
     ~MyVector()
@@ -450,75 +544,101 @@ public:
     }
 };
 
-int main()
-{
-int x = 0;
+    int main() {
 
-MyVector v1;
-v1.pushFront(18);
-v1.pushFront(20);
-v1.pushFront(25);
-v1.pushRear(18);
-v1.pushRear(20);
-v1.pushRear(25);
-v1.print();
-// [25, 20, 18, 18, 20, 25]
+        ofstream file;
+        file.open("test.out");
+        cout << "Dylan Miles" << endl;
+        cout << "Sept 9, 2021" << endl;
+        cout << "Fall 2143" << endl;
 
-int A[] = {11,25,33,47,51};
-MyVector v2(A,5);
-v2.print();
-// [11, 25, 33, 47, 51]
 
-v2.pushFront(9);
-//v2.inOrderPush(27);
-v2.pushRear(63);
-v2.print();
-// [9, 11, 25, 33, 47, 51, 63]
+        file << "Dylan Miles" << endl;
+        file << "Sept 9, 2021" << endl;
+        file << "Fall 2143" << endl;
+        int x = 0;
 
-v1.pushRear(v2);
-v1.print();
-// [25, 20, 18, 18, 20, 25, 9, 11, 25, 33, 47, 51, 63]
+        MyVector v1;
+        v1.pushFront(18);
+        v1.pushFront(20);
+        v1.pushFront(25);
+        v1.pushRear(18);
+        v1.pushRear(20);
+        v1.pushRear(25);
+        v1.print();
+        v1.print(file);
+        // [25, 20, 18, 18, 20, 25]
 
-x = v1.popFront();
-x = v1.popFront();
-x = v1.popFront();
-v1.print();
-// [18, 20, 25, 9, 11, 25, 27, 33, 47, 51, 63]
-cout<<x<<endl;
-// 18
+        int A[] = {11,25,33,47,51};
+        MyVector v2(A,5);
+        v2.print();
+        v2.print(file);
+        // [11, 25, 33, 47, 51]
 
-x = v1.popRear();
-x = v1.popRear();
-x = v1.popRear();
-v1.print();
-// [18, 20, 25, 9, 11, 25, 27, 33]
-cout<<x<<endl;
-// 47
+        v2.pushFront(9);
+        //v2.inOrderPush(27);
+        v2.pushRear(63);
+        v2.print();
+        v2.print(file);
+        // [9, 11, 25, 33, 47, 51, 63]
 
-x = v2.popAt(3);
-v2.print();
-// [9, 11, 25, 33, 47, 51, 63]
-cout<<x<<endl;
-// 27
+        v1.pushRear(v2);
+        v1.print();
+        v1.print(file);
+        // [25, 20, 18, 18, 20, 25, 9, 11, 25, 33, 47, 51, 63]
 
-x = v2.find(51);
-cout<<x<<endl;
-// 5
+        x = v1.popFront();
+        x = v1.popFront();
+        x = v1.popFront();
+        v1.print();
+        v1.print(file);
+        // [18, 20, 25, 9, 11, 25, 27, 33, 47, 51, 63]
+        cout<<x<<endl;
+        file<<x<<endl;
+        // 18
 
-x = v2.find(99);
-cout<<x<<endl;
-// -1
+        x = v1.popRear();
+        x = v1.popRear();
+        x = v1.popRear();
+        v1.print();
+        v1.print(file);
+        // [18, 20, 25, 9, 11, 25, 27, 33]
+        cout<<x<<endl;
+        file<<x<<endl;
+        // 47
 
-MyVector v3(v1);
-v3.print();
-// [18, 20, 25, 9, 11, 25, 27, 33]
+        x = v2.popAt(3);
+        v2.print();
+        v2.print(file);
+        // [9, 11, 25, 33, 47, 51, 63]
+        cout<<x<<endl;
+        file<<x<<endl;
+        // 27
 
-v3.pushFront(v2);
-v3.print();
-//[9, 11, 25, 33, 47, 51, 63, 18, 20, 25, 9, 11, 25, 27, 33]
+        x = v2.find(51);
+        cout<<x<<endl;
+        file<<x<<endl;
+        // 5
 
-MyVector v4("input.dat");
-v4.pushRear(v3);
-v4.print();
+        x = v2.find(99);
+        cout<<x<<endl;
+        file<<x<<endl;
+        // -1
 
-}
+        MyVector v3(v1);
+        v3.print();
+        v3.print(file);
+        // [18, 20, 25, 9, 11, 25, 27, 33]
+
+        v3.pushFront(v2);
+        v3.print();
+        v3.print(file);
+        //[9, 11, 25, 33, 47, 51, 63, 18, 20, 25, 9, 11, 25, 27, 33]
+
+        MyVector v4("input.dat");
+        v4.pushRear(v3);
+        v4.print();
+        v4.print(file);
+
+        file.close();
+    }

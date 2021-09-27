@@ -21,6 +21,3 @@
 ### Example Command
 
 - ./main
-
-
-EZ

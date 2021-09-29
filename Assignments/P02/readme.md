@@ -10,7 +10,7 @@
 |:-:|----------------------------|-----------------------|
 | 1 | [main.cpp](./Main.cpp)     | Entire class/program. |
 | 2 | [banner](./banner)         | Program banner        |
-| 4 | [output.txt](./output.txt) | Provided output file  |
+| 3 | [output.txt](./output.txt) | Provided output file  |
 
 
 ### Instructions

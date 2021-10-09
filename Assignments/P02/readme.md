@@ -1,4 +1,4 @@
-## P01 - MyVector class
+## P02 - MyVector class
 ### Dylan Miles
 ### Description: Robust vector with lots of functionality 
 

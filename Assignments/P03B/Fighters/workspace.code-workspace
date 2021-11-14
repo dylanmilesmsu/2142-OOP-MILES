@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\P03A"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"iostream": "cpp",
+			"xstring": "cpp",
+			"vector": "cpp",
+			"system_error": "cpp",
+			"xlocale": "cpp"
+		}
+	}
+}

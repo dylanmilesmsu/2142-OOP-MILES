@@ -34,7 +34,7 @@ public:
         die = new Dice(damage);
     }
 
-    virtual double use() {
+    virtual int use() {
         return die->roll();
     }
 

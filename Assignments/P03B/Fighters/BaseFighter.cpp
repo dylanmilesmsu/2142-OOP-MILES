@@ -9,25 +9,40 @@ using namespace std;
 
 class BaseFighter {
     public:
-        double attack() {
-            double dmg = weapon->use();
+        int attack() {
+            int dmg = weapon->use();
             return dmg;
         }
         void attack(BaseFighter* &other) {
-            double dmg = weapon->use();
+            int dmg = weapon->use();
             other->takeDamage(dmg);
         }
-        void takeDamage(double dmg) {
+        void takeDamage(int dmg) {
             hp -= dmg;
         }
+
+        bool alive() {
+            return hp > 0;
+        }
+
+        int heal() {
+            if(hp < maxhp) {
+                hp += regenRate;
+                return regenRate;
+            }
+            return 0;
+        }
+
         string name;
+        int maxhp;
         int hp;
         double regenRate;
         Weapon* weapon;
         void genStats() {
-            //hp random between 10-15
+            //hp random between 10-20
             //regen rate random between 1-3
-            hp = 10 + (rand() % 5);
-            regenRate = (1 + (rand() % 2));
+            hp = 10 + (rand() % 10);
+            maxhp = hp;
+            regenRate = (2 + (rand() % 6));
         }
 };

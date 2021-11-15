@@ -15,12 +15,11 @@ class FireWeapon : public Weapon {
         damage = other->damage;
         die = other->die;
     }
-    double use() {
+    int use() {
         vector<string> diceroll = {"1.d.6", "1.d.8"};
         damage = randomChoice(diceroll);
         Dice* otherdie = new Dice(damage);
-        double add = otherdie->roll();
-        cout << "this weapon is FIRE so it does " << add << " more damage." << endl;
+        int add = otherdie->roll();
         return die->roll() + add;
     }
 };

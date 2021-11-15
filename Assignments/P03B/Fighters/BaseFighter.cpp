@@ -41,8 +41,8 @@ class BaseFighter {
         void genStats() {
             //hp random between 10-20
             //regen rate random between 1-3
-            hp = 10 + (rand() % 10);
+            hp = 15 + (rand() % 20);
             maxhp = hp;
-            regenRate = (2 + (rand() % 6));
+            regenRate = (5 + (rand() % 6));
         }
 };

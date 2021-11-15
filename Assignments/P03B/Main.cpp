@@ -42,13 +42,13 @@ void populateDefenders(int attackersSize, vector<BaseFighter*>& defenders) {
     }
 }
 
-BaseFighter* getDefender(BaseFighter* attacker, vector<BaseFighter*>& defenders)  {
-    for(BaseFighter* defender : defenders) {
-        if(defender->alive() && defender->name == attacker->name) {
+BaseFighter* getDefender(BaseFighter* attacker, vector<BaseFighter*>* defenders)  {
+    for(BaseFighter* defender : *defenders) {
+        if(defender->name == attacker->name) {
             return defender;
         }
     }
-    return nullptr;
+    return defenders->back();
 }   
 
 void healDefenders(vector<BaseFighter*>& defenders) {
@@ -83,9 +83,9 @@ int main() {
 
     while(attackers.size() && defenders.size()) {
         CurrentAttacker = attackers.back();
-        CurrentDefender = defenders.back();
+        CurrentDefender = getDefender(CurrentAttacker, &defenders);
         while(CurrentAttacker->alive() && CurrentDefender->alive()) {
-            this_thread::sleep_for(chrono::milliseconds(100));
+            this_thread::sleep_for(chrono::milliseconds(10));
             system("clear");
             cout << "Attackers" << setw(5) << " " << setw(0) << "Defenders" << endl;
             cout << left << setw(13) << attackers.size() << " " << setw(0) << defenders.size() << endl;
@@ -98,24 +98,33 @@ int main() {
                 int dmg2 = CurrentDefender->attack();
                 CurrentAttacker->takeDamage(dmg2);
                 cout << "Defender " << CurrentDefender->name << " survives and counterattacks for: " << dmg << " DMG!" << endl;
-                if(CurrentAttacker->hp < 6) {
-                    CurrentAttacker = swapDefender(&defenders, CurrentAttacker);
+                cout << "Attacks health reduced to: " << CurrentAttacker->hp << endl;
+                if(CurrentDefender->hp < 6) {
+                    CurrentDefender = swapDefender(&defenders, CurrentDefender);
                 }
+            } else {
+                defenders.pop_back();
             }
             healDefenders(defenders);
-        }
-        if(!CurrentAttacker->alive() && !CurrentDefender->alive()) {
-            cout << "bruh moment how'd they both die?" << endl;
-            this_thread::sleep_for(chrono::milliseconds(1000));         
         }
         if(!CurrentAttacker->alive()) {
             attackers.pop_back();
             cout << "attacker " << CurrentAttacker->name << " died!!!!" << endl;
         }
-        if(!CurrentDefender->alive()) {
-            defenders.pop_back();
-            cout << "defender " << CurrentDefender->name << " died!!!!" << endl;
+
+        //The swapping sometime screws stuff up somehow
+        int i = 0;
+        for(BaseFighter* fighter : defenders) {
+            if(fighter->hp < 0) {
+                defenders.erase(defenders.begin() + i);
+            }
+            i++;
         }
+
+        // for(BaseFighter* fighter : defenders) {
+        //     cout << fighter->hp << endl;
+        //             this_thread::sleep_for(chrono::milliseconds(200));
+        // }
     }
     if(attackers.size()) {
         cout << "ATTACKERS WIN!!!!";

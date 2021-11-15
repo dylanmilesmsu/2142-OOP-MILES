@@ -78,11 +78,12 @@ BaseFighter* swapDefender(vector<BaseFighter*>* defenders, BaseFighter* curFight
 }
 
 int main() {
-
+    // Create a vector of attackers
     srand(time(0));
     vector<BaseFighter*> attackers;
     vector<BaseFighter*> defenders;
 
+    // Populate the attackers vector
     populateAttackers(attackers);
     populateDefenders(attackers.size(), defenders);
 
@@ -90,33 +91,45 @@ int main() {
     BaseFighter* CurrentDefender;
 
     while(attackers.size() && defenders.size()) {
+        // Get an attacker for this round
         CurrentAttacker = attackers.back();
         CurrentDefender = getDefender(CurrentAttacker, &defenders);
         while(CurrentAttacker->alive() && CurrentDefender->alive()) {
+
+            // Setup interface for the round
             this_thread::sleep_for(chrono::milliseconds(1));
             system("clear");
             cout << "Attackers" << setw(5) << " " << setw(0) << "Defenders" << endl;
             cout << left << setw(13) << attackers.size() << " " << setw(0) << defenders.size() << endl;
             cout << CurrentAttacker->name << ":" << CurrentAttacker->hp << "hp | " << CurrentDefender->name << ":" <<CurrentDefender->hp << "hp" << endl << endl;
 
+            // Attack
+            // First, the attacker attacks
             int dmg = CurrentAttacker->attack();
             cout << "Attacker " << CurrentAttacker->name << " does: " << dmg << " DMG!" << endl;
             CurrentDefender->takeDamage(dmg);
+
+            // Then, if the defender is still alive, the defender attacks
             if(CurrentDefender->alive()) {
                 int dmg2 = CurrentDefender->attack();
                 CurrentAttacker->takeDamage(dmg2);
                 cout << "Defender " << CurrentDefender->name << " survives and counterattacks for: " << dmg << " DMG!" << endl;
                 cout << "Attacks health reduced to: " << CurrentAttacker->hp << endl;
                 if(CurrentDefender->hp < 6) {
+                    // If the defender is low on health, swap him out for another defender of the same type
                     CurrentDefender = swapDefender(&defenders, CurrentDefender);
                 }
             } else {
+                // If the defender is dead, remove him from the defender list
                 cout << "defender " << CurrentDefender->name << " died!!!!" << endl;
                 defenders.pop_back();
 
             }
+
+            // Heal the defenders
             healDefenders(defenders);
         }
+        // Remove the dead attacker from the attacker list
         if(!CurrentAttacker->alive()) {
             attackers.pop_back();
             cout << "attacker " << CurrentAttacker->name << " died!!!!" << endl;
@@ -133,6 +146,7 @@ int main() {
         }
 
     }
+    // If there are no defenders left, the attackers win
     if(attackers.size()) {
         cout << "ATTACKERS WIN!!!!";
     }

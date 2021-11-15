@@ -66,7 +66,7 @@ void healDefenders(vector<BaseFighter*>& defenders) {
         }
     }
 }
-//Swaps out defender for another defender of the same time (if it exists)
+//Swaps out defender for another defender of the same type (if it exists)
 BaseFighter* swapDefender(vector<BaseFighter*>* defenders, BaseFighter* curFighter) {
     for(BaseFighter* defender : *defenders) {
         if(defender != curFighter && defender->name == curFighter->name) {

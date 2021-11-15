@@ -9,6 +9,12 @@ using namespace std;
 
 #pragma once
 
+/*
+*  Weapon base class
+* implements most stuff so that new weapon creation 
+* is as easy as possible. New weapon additions would be easy.
+*/
+
 class Weapon {
 public:
     string name;    // name of weapon
@@ -34,6 +40,10 @@ public:
         die = new Dice(damage);
     }
 
+    //this method is kept virtual 
+    //so that MagicWeapon and FireWeapon
+    //can add damage to normal weapons
+    //more info in those classes
     virtual int use() {
         return die->roll();
     }

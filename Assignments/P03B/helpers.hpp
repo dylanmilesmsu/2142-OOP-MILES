@@ -7,6 +7,8 @@ using namespace std;
 
 #pragma once
 
+//Author: Professor Griffin MSUTexas
+
 /**
  * @brief Splits a string into parts based on a delimiter
  *

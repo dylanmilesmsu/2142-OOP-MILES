@@ -6,6 +6,10 @@
 #include "../Weapons/MagicWeapon.cpp"
 using namespace std;
 
+/*
+* just uses stuff from basefighter, sword, and MagicWeapon class
+*/ 
+
 class Elf : public BaseFighter { 
     public:
     Elf() {

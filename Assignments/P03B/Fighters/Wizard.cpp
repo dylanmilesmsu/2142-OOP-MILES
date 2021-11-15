@@ -5,6 +5,10 @@
 #include "../Weapons/Spell.cpp"
 using namespace std;
 
+/*
+* just uses stuff from basefighter and spell class
+*/ 
+
 class Wizard : public BaseFighter { 
     public:
     Wizard() {

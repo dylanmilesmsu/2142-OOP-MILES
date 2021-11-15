@@ -10,8 +10,11 @@
 #include "Fighters/Archer.cpp"
 using namespace std;
 
+//Adds a random amount of attackers to the provided attackers vector
+//seems the assignment forgot to provide and input and in class we used random generator
+//so this should be fine?
 void populateAttackers(vector<BaseFighter*>& attackers) {
-    for(int i = 0; i < (100 + rand() % 5000); i++) {
+    for(int i = 0; i < (100 + rand() % 3000); i++) {
         BaseFighter* archer = new Archer();
         BaseFighter* warrior = new Warrior();
         BaseFighter* wizard = new Wizard();
@@ -24,7 +27,8 @@ void populateAttackers(vector<BaseFighter*>& attackers) {
         attackers.push_back(dragonborn);
     }
 }
-
+//Populates the provided defenders vector based on the size of the attackers list
+//1 of each type of defender per 100 attackers
 void populateDefenders(int attackersSize, vector<BaseFighter*>& defenders) {
     //Defending force can have 1 of each character type for every 100 attackers.
     int size = round(attackersSize / 100.0);
@@ -42,6 +46,8 @@ void populateDefenders(int attackersSize, vector<BaseFighter*>& defenders) {
     }
 }
 
+//Function to get a new defender based on the type of attacker is up for battle
+//this way types will match when fighting
 BaseFighter* getDefender(BaseFighter* attacker, vector<BaseFighter*>* defenders)  {
     for(BaseFighter* defender : *defenders) {
         if(defender->name == attacker->name) {
@@ -51,6 +57,7 @@ BaseFighter* getDefender(BaseFighter* attacker, vector<BaseFighter*>* defenders)
     return defenders->back();
 }   
 
+//Heals all defenders by the amount defined in their object
 void healDefenders(vector<BaseFighter*>& defenders) {
     for(BaseFighter* defender : defenders) {
         int hp = defender->heal();
@@ -59,6 +66,7 @@ void healDefenders(vector<BaseFighter*>& defenders) {
         }
     }
 }
+//Swaps out defender for another defender of the same time (if it exists)
 BaseFighter* swapDefender(vector<BaseFighter*>* defenders, BaseFighter* curFighter) {
     for(BaseFighter* defender : *defenders) {
         if(defender != curFighter && defender->name == curFighter->name) {
@@ -85,7 +93,7 @@ int main() {
         CurrentAttacker = attackers.back();
         CurrentDefender = getDefender(CurrentAttacker, &defenders);
         while(CurrentAttacker->alive() && CurrentDefender->alive()) {
-            this_thread::sleep_for(chrono::milliseconds(10));
+            this_thread::sleep_for(chrono::milliseconds(1));
             system("clear");
             cout << "Attackers" << setw(5) << " " << setw(0) << "Defenders" << endl;
             cout << left << setw(13) << attackers.size() << " " << setw(0) << defenders.size() << endl;
@@ -103,7 +111,9 @@ int main() {
                     CurrentDefender = swapDefender(&defenders, CurrentDefender);
                 }
             } else {
+                cout << "defender " << CurrentDefender->name << " died!!!!" << endl;
                 defenders.pop_back();
+
             }
             healDefenders(defenders);
         }
@@ -115,16 +125,13 @@ int main() {
         //The swapping sometime screws stuff up somehow
         int i = 0;
         for(BaseFighter* fighter : defenders) {
-            if(fighter->hp < 0) {
+            if(fighter->hp <= 0) {
                 defenders.erase(defenders.begin() + i);
+                cout << "defender " << CurrentDefender->name << " died!!!!" << endl;
             }
             i++;
         }
 
-        // for(BaseFighter* fighter : defenders) {
-        //     cout << fighter->hp << endl;
-        //             this_thread::sleep_for(chrono::milliseconds(200));
-        // }
     }
     if(attackers.size()) {
         cout << "ATTACKERS WIN!!!!";
